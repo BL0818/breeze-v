@@ -1,0 +1,37 @@
+{
+  "name": "@breezev/ui",
+  "version": "0.2.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": ["src", "CHANGELOG.md", "README.md"],
+  "scripts": {
+    "lint": "eslint \"src/**/*.{ts,vue}\" --max-warnings=0",
+    "typecheck": "vue-tsc --noEmit -p ../../tsconfig.json",
+    "test": "echo \"No tests in @breezev/ui\"",
+    "build": "echo \"No build step for @breezev/ui\""
+  },
+  "peerDependencies": {
+    "vue": "3.5.13"
+  },
+  "devDependencies": {
+    "vue": "3.5.13"
+  },
+  "dependencies": {
+    "@breezev/types": "workspace:*",
+    "@breezev/utils": "workspace:*",
+    "@iconify-json/logos": "^1.2.6",
+    "@iconify-json/lucide": "^1.2.38",
+    "@iconify/vue": "^4.3.0",
+    "@vueuse/motion": "^3.0.3",
+    "radix-vue": "^1.9.11",
+    "vee-validate": "^4.15.0"
+  }
+}

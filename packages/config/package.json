@@ -1,0 +1,23 @@
+{
+  "name": "@breezev/config",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./uno": "./uno.config.ts",
+    "./tsconfig": "./tsconfig.base.json"
+  },
+  "dependencies": {
+    "@iconify-json/logos": "^1.2.6",
+    "@iconify-json/lucide": "^1.2.38",
+    "@unocss/preset-icons": "^66.1.0",
+    "@unocss/preset-wind3": "^66.1.0",
+    "unocss": "^66.1.0"
+  },
+  "scripts": {
+    "lint": "biome check .",
+    "typecheck": "tsc --noEmit -p ../config/tsconfig.base.json",
+    "test": "echo \"No tests in @breezev/config\"",
+    "build": "echo \"No build step for @breezev/config\""
+  }
+}

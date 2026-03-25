@@ -1,0 +1,131 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - release/**
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      run_e2e: ${{ steps.filter.outputs.e2e }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect path changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            e2e:
+              - 'apps/web/**'
+              - 'packages/ui/**'
+              - 'packages/config/**'
+              - 'turbo.json'
+              - 'pnpm-lock.yaml'
+
+  quality:
+    runs-on: ubuntu-latest
+    needs: changes
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN || '' }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM || '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Turbo cache mode
+        run: |
+          if [ -n "$TURBO_TOKEN" ]; then
+            echo "????? TURBO_TOKEN?????Vercel Turbo ????????
+          else
+            echo "?????? TURBO_TOKEN?????????????????
+          fi
+
+      - name: Changeset gate (releasable packages only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/check-changeset.mjs
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      - name: Security audit (High/Critical)
+        run: pnpm run audit
+
+      - name: License policy gate
+        run: pnpm license:check
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs:
+      - quality
+      - changes
+    if: github.ref == 'refs/heads/main' || needs.changes.outputs.run_e2e == 'true'
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN || '' }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM || '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm --filter @breezev/web exec playwright install --with-deps
+
+      - name: E2E
+        run: pnpm --filter @breezev/web run e2e
+

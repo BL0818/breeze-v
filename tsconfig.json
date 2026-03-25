@@ -1,0 +1,14 @@
+{
+  "extends": "./packages/config/tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["apps/web/src/*"],
+      "@breezev/types": ["packages/types/src/index.ts"],
+      "@breezev/utils": ["packages/utils/src/index.ts"],
+      "@breezev/ui": ["packages/ui/src/index.ts"],
+      "@breezev/config/*": ["packages/config/*"]
+    }
+  },
+  "include": ["apps/**/*", "packages/**/*", "scripts/**/*", "*.ts", "*.d.ts", "*.mts"]
+}
