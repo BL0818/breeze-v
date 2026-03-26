@@ -1,5 +1,11 @@
 # BreezeV 🌬️
 
+[![CI](https://github.com/BL0818/breeze-v/actions/workflows/ci.yml/badge.svg)](https://github.com/BL0818/breeze-v/actions/workflows/ci.yml)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-10.x-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
+[![Vue](https://img.shields.io/badge/Vue-3.5-42b883?logo=vuedotjs&logoColor=white)](https://vuejs.org/)
+[![Turbo](https://img.shields.io/badge/Turbo-2.x-000000?logo=turborepo&logoColor=white)](https://turbo.build/repo)
+
 一个面向企业后台与中台场景的 **Vue 3 Monorepo 工程模板**，强调「可复用组件」、「类型安全表单」、「一致化工程规范」与「可持续迭代」。
 
 > 适合用作管理后台、B 端系统、内部工具平台的起步仓库。
@@ -133,4 +139,3 @@ CI 默认覆盖以下环节：
 ---
 
 如果你准备把它作为团队基线模板，可以先从 `apps/web` 新增一个业务页面，再把通用逻辑沉淀到 `packages`，逐步形成稳定的工程资产。
-
